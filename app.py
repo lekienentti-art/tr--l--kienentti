@@ -40,7 +40,7 @@ if user_input or file_anh:
         try:
             selected_key = random.choice(all_keys)
             genai.configure(api_key=selected_key)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-2.5-flash')
             
             prompt = [user_input] if user_input else ["Phân tích ảnh"]
             if file_anh:
@@ -50,3 +50,4 @@ if user_input or file_anh:
             st.markdown(res.text)
         except Exception as e:
             st.error(f"❌ Lỗi: {str(e)}")
+
