@@ -86,20 +86,18 @@ if st.button("⬅️ Trở lại sảnh chờ"):
     del st.session_state.ai_persona
     st.rerun()
 
-# 1. In ra toàn bộ lịch sử chat (nó sẽ tự cuộn lên trên)
+# 1. In ra toàn bộ lịch sử chat (khi có tin nhắn mới nó sẽ tự cuộn xuống đây)
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# 2. VÙNG GHIM BẤT TỬ: Đóng đinh nút đính kèm ảnh ở dưới đáy màn hình
-vung_ghim_day = st.container(bottom=True)
-with vung_ghim_day:
-    with st.popover("➕ Đính kèm ảnh (Tùy chọn)"):
-        file_anh = st.file_uploader("", type=['png', 'jpg', 'jpeg'], label_visibility="collapsed")
-        if file_anh:
-            st.success("✅ Đã ngậm ảnh, sếp gõ lệnh đi!")
+# 2. ĐÃ SỬA LỖI: Thả nút đính kèm ngay dưới dòng tin nhắn cuối cùng
+with st.popover("➕ Đính kèm ảnh (Tùy chọn)"):
+    file_anh = st.file_uploader("", type=['png', 'jpg', 'jpeg'], label_visibility="collapsed")
+    if file_anh:
+        st.success("✅ Đã ngậm ảnh, sếp gõ lệnh đi!")
 
-# 3. Thanh nhập chữ của sếp (cũng nằm ở đáy màn hình, sát dưới nút đính kèm)
+# 3. Thanh nhập chữ của sếp (mặc định luôn nổi ở dưới đáy)
 user_input = st.chat_input(f"Nhắn cho {st.session_state.ai_name}...")
 
 if user_input or file_anh:
