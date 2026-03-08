@@ -116,7 +116,7 @@ if user_input or file_anh:
             # Chọn key random và thiết lập não bộ AI
             selected_key = random.choice(all_keys)
             genai.configure(api_key=selected_key)
-            model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=st.session_state.ai_persona)
+            model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=st.session_state.ai_persona)
             
             # Trộn đồ để gửi (Text + Ảnh)
             prompt_parts = []
@@ -135,3 +135,4 @@ if user_input or file_anh:
             
         except Exception as e:
             st.error(f"❌ Lỗi: {str(e)}")
+
