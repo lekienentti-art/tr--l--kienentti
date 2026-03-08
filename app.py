@@ -44,7 +44,7 @@ except:
     st.stop()
 
 # ==========================================
-# 🎭 MÀN 1: SẢNH CHỜ CHỌN AI (CẬP NHẬT PHÂN NÃO)
+# 🎭 MÀN 1: SẢNH CHỜ CHỌN AI 
 # ==========================================
 if "ai_persona" not in st.session_state:
     st.title("✨ TRUNG TÂM AI - KIENENTTI")
@@ -55,7 +55,6 @@ if "ai_persona" not in st.session_state:
         if st.button("📚 GỌI ENTTI2 (Học Tập)", use_container_width=True):
             st.session_state.ai_name = "Entti2"
             st.session_state.ai_persona = "Bạn tên là Entti2. Bạn là một trợ lý học tập cực kỳ thông minh, rất chăm chỉ. Bạn luôn hướng dẫn và chỉ bảo người dùng giải bài tập từng bước một cách cặn kẽ."
-            # Lắp não 2.5 Flash Xịn cho Entti2
             st.session_state.ai_model = "gemini-2.5-flash" 
             st.session_state.messages = [] 
             st.rerun()
@@ -63,7 +62,6 @@ if "ai_persona" not in st.session_state:
         if st.button("👼 GỌI KEM (Hiền Lành)", use_container_width=True):
             st.session_state.ai_name = "Kem"
             st.session_state.ai_persona = "Bạn tên là Kem. Bạn là một trợ lý ảo siêu hiền lành, rất ham ăn, cute và rất dễ khóc nhè nếu bị mắng. Bạn luôn gọi người dùng là Sếp."
-            # Lắp não 2.5 Flash LITE (nhẹ, nhanh) cho Kem
             st.session_state.ai_model = "gemini-2.5-flash-lite" 
             st.session_state.messages = []
             st.rerun()
@@ -75,7 +73,6 @@ if "ai_persona" not in st.session_state:
         if custom_ai:
             st.session_state.ai_name = "AI Tự Chọn"
             st.session_state.ai_persona = custom_ai
-            # Lắp não LITE cho AI tự chọn để tiết kiệm
             st.session_state.ai_model = "gemini-2.5-flash-lite" 
             st.session_state.messages = []
             st.rerun()
@@ -89,15 +86,20 @@ if st.button("⬅️ Trở lại sảnh chờ"):
     del st.session_state.ai_persona
     st.rerun()
 
+# 1. In ra toàn bộ lịch sử chat (nó sẽ tự cuộn lên trên)
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-with st.popover("➕ Đính kèm ảnh (Tùy chọn)"):
-    file_anh = st.file_uploader("", type=['png', 'jpg', 'jpeg'], label_visibility="collapsed")
-    if file_anh:
-        st.success("✅ Đã ngậm ảnh, sếp gõ lệnh đi!")
+# 2. VÙNG GHIM BẤT TỬ: Đóng đinh nút đính kèm ảnh ở dưới đáy màn hình
+vung_ghim_day = st.container(bottom=True)
+with vung_ghim_day:
+    with st.popover("➕ Đính kèm ảnh (Tùy chọn)"):
+        file_anh = st.file_uploader("", type=['png', 'jpg', 'jpeg'], label_visibility="collapsed")
+        if file_anh:
+            st.success("✅ Đã ngậm ảnh, sếp gõ lệnh đi!")
 
+# 3. Thanh nhập chữ của sếp (cũng nằm ở đáy màn hình, sát dưới nút đính kèm)
 user_input = st.chat_input(f"Nhắn cho {st.session_state.ai_name}...")
 
 if user_input or file_anh:
@@ -112,7 +114,6 @@ if user_input or file_anh:
             selected_key = random.choice(all_keys)
             genai.configure(api_key=selected_key)
             
-            # ĐÂY LÀ KHÚC AI LẤY ĐÚNG NÃO ĐỂ DÙNG 👇
             model = genai.GenerativeModel(st.session_state.ai_model, system_instruction=st.session_state.ai_persona)
             
             prompt_parts = []
